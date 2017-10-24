@@ -1,0 +1,14 @@
+<html>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  <script src="chat.js"></script>
+  <body ng-app="myApp">
+    <div ng-controller="chatCtrl as chat">
+      <div ng-repeat="message in chat.messages">
+        {{message.user + ": " + message.message}}
+      </div>
+      <input ng-model="chat.user" />
+      <input ng-model="chat.message" />
+      <button ng-click="chat.sendMessage()">Click</button>
+    </div>
+  </body>
+</html>

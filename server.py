@@ -1,6 +1,7 @@
 import asyncio
 import websockets
 import json
+import message_handler
 
 LISTEN_ADDRESS = ('0.0.0.0', 8080) #TODO: Abstract into a config file, but keep default
 clients = {}
@@ -28,10 +29,10 @@ def client_handler(websocket, path):
 				#yield from client.send(their_name + ' has left the chat')
 				yield from client.send(json.dumps({"command": "disconnect", "user": name}))
 			break
-		print(name + ':' + message)
-		for client, _ in clients.items():
-			#yield from client.send('{}:{}'.format(name, message))
-			yield from client.send(json.dumps({"command": "message", "user": name, "message": message}))
+		com = json.loads(message)
+		print(com["command"] == "message")
+		if com["command"] == "message":
+			message_handler.send(name, com, clients)
 	
 start_server = websockets.serve(client_handler, *LISTEN_ADDRESS)
 asyncio.get_event_loop().run_until_complete(start_server)
