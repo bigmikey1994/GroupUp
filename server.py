@@ -1,9 +1,9 @@
 import asyncio
 import websockets
 import json
-from messagehandler import send
+import messagehandler
 
-LISTEN_ADDRESS = ('0.0.0.0', 8080) #TODO: Abstract into a config file, but keep default
+LISTEN_ADDRESS = ('0.0.0.0', 8080) #TODO: Move into a config file, but keep default
 clients = {}
 
 @asyncio.coroutine
@@ -32,7 +32,7 @@ def client_handler(websocket, path):
 		com = json.loads(message)
 		if com["command"] == "message":
 			print("test")
-			send(name, com)
+			messagehandler.send(name, com)
 	
 start_server = websockets.serve(client_handler, *LISTEN_ADDRESS)
 asyncio.get_event_loop().run_until_complete(start_server)
