@@ -29,10 +29,9 @@ def client_handler(websocket, path):
 				#yield from client.send(their_name + ' has left the chat')
 				yield from client.send(json.dumps({"command": "disconnect", "user": name}))
 			break
-		com = json.loads(message)
-		if com["command"] == "message":
-			print("test")
-			messagehandler.send(name, com)
+		command = json.loads(message)
+		if command["command"] == "message":
+			yield from messagehandler.send(name, command, clients)
 	
 start_server = websockets.serve(client_handler, *LISTEN_ADDRESS)
 asyncio.get_event_loop().run_until_complete(start_server)
