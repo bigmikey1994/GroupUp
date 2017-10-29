@@ -2,6 +2,7 @@ import asyncio
 import websockets
 import json
 import messagehandler
+import accounthandler
 
 LISTEN_ADDRESS = ('0.0.0.0', 8080) #TODO: Move into a config file, but keep default
 clients = {}
@@ -10,7 +11,32 @@ clients = {}
 def client_handler(websocket, path):
 	print('New client', websocket)
 	print(' ({} existing clients)'.format(len(clients)))
-	name = yield from websocket.recv()
+	info = yield from websocket.recv()
+	info = json.loads(info)
+	print(info)
+	if info['command'] == "login":
+		success = accounthandler.login(info)
+	if info['command'] == "register":
+		success = accounthandler.register(info)
+	while not success:
+		com = {}
+		com['command'] = 'fail'
+		if info['command'] == "login":
+			com['error'] = "invalid username or password"
+		if info['command'] == "register":
+			com['error'] = "an account with that name already exists"
+		yield from websocket.send(json.dumps(com))
+		info = yield from websocket.recv()
+		info = json.loads(info)
+		print(info)
+		if info['command'] == "login":
+			success = accounthandler.login(info)
+		if info['command'] == "register":
+			success = accounthandler.register(info)
+	com = {}	
+	com['command'] = "success"
+	yield from websocket.send(json.dumps(com))
+	name = info['user']
 	print(websocket, 'is now known as', name)
 	#yield from websocket.send('Welcome to websocket-chat {}'.format(name))
 	#yield from websocket.send('There are {} other users connected: {}'.format(len(clients), list(clients.values())))

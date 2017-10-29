@@ -3,12 +3,20 @@
   <script src="chat.js"></script>
   <body ng-app="myApp">
     <div ng-controller="chatCtrl as chat">
-      <div ng-repeat="message in chat.messages">
-        {{message.user + ": " + message.message}}
+      <div ng-hide="chat.online">
+        <input ng-model="chat.user" />
+        <input ng-model="chat.pass" />
+        <button ng-click="chat.login()">Log in</button>
+        <button ng-click="chat.register()">Register</button>
+        {{chat.error}}
       </div>
-      <input ng-model="chat.user" />
-      <input ng-model="chat.message" />
-      <button ng-click="chat.sendMessage()">Click</button>
+      <div ng-show="chat.online">
+        <div ng-repeat="message in chat.messages">
+          {{message.user + ": " + message.message}}
+        </div>
+        <input ng-model="chat.message" />
+        <button ng-click="chat.sendMessage()">Send Message</button>
+      </div>
     </div>
   </body>
 </html>
