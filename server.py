@@ -1,64 +1,56 @@
 import asyncio
 import websockets
 import json
-import messagehandler
 import accounthandler
+import messagehandler
 
-LISTEN_ADDRESS = ('0.0.0.0', 8080) #TODO: Move into a config file, but keep default
+LISTEN_ADDRESS = ('0.0.0.0',8080)
 clients = {}
+channels = {}
 
 @asyncio.coroutine
-def client_handler(websocket, path):
-	print('New client', websocket)
-	print(' ({} existing clients)'.format(len(clients)))
-	info = yield from websocket.recv()
-	info = json.loads(info)
-	print(info)
-	if info['command'] == "login":
-		success = accounthandler.login(info)
-	if info['command'] == "register":
-		success = accounthandler.register(info)
-	while not success:
-		com = {}
-		com['command'] = 'fail'
-		if info['command'] == "login":
-			com['error'] = "invalid username or password"
-		if info['command'] == "register":
-			com['error'] = "an account with that name already exists"
-		yield from websocket.send(json.dumps(com))
-		info = yield from websocket.recv()
-		info = json.loads(info)
-		print(info)
-		if info['command'] == "login":
-			success = accounthandler.login(info)
-		if info['command'] == "register":
-			success = accounthandler.register(info)
-	com = {}	
-	com['command'] = "success"
-	yield from websocket.send(json.dumps(com))
-	name = info['user']
-	print(websocket, 'is now known as', name)
-	#yield from websocket.send('Welcome to websocket-chat {}'.format(name))
-	#yield from websocket.send('There are {} other users connected: {}'.format(len(clients), list(clients.values())))
-	yield from websocket.send(json.dumps({"command": "init", "users": list(clients.values())}))
-	clients[websocket] = name
-	for client, _ in clients.items():
-		#yield from client.send(name + 'has joined the chat')
-		yield from client.send(json.dumps({"command": "connect", "user": name}))
+def client_handler(websocket,path):
+	cmd = yield from websocket.recv()
+	cmd = json.loads(cmd)
+	if cmd["command"] == "login":
+		success = accounthandler.login(cmd)
+		if not type(success) is str:
+			if clients[success[0]]:
+				success = "That account is already logged in"
+	if cmd["command"] == "register":
+		success = accounthandler.register(cmd)
+	while type(success) is str:
+		cmd = {"command": "fail", "error": success}
+		yield from websocket.send(json.dumps(cmd))
+		cmd = yield from websocket.recv()
+		cmd = json.loads(cmd)
+		if cmd["command"] == "login":
+			success = accounthandler.login(cmd)
+			if not type(success) is str:
+				if clients[success[0]]:
+					success = "That account is already logged in"
+		if cmd["command"] == "register":
+			success = accounthandler.register(cmd)
+	uid = success[0]
+	channels = accounthandler.getchannels(uid)
+	clients[uid] = {"socket": websocket, "channels": channels}
+	for c in channels:
+		if channels[c[0]]:
+			channels[c[0]].append(uid)
+		else:
+			channels[c[0]] = [uid]
+	yield from websocket.send(json.dumps({"command":"success", "channels": channels}))
 	while True:
-		message = yield from websocket.recv()
-		if message == None:
-			their_name = clients[websocket]
-			del clients[websocket]
-			print('Client closed connection', websocket)
-			for client, _ in clients.items():
-				#yield from client.send(their_name + ' has left the chat')
-				yield from client.send(json.dumps({"command": "disconnect", "user": name}))
+		cmd = yield from websocket.recv()
+		if cmd == "":
+			for c in clients[uid]["channels"]:
+				channels[c[0]].remove(uid)
+			del clients[uid]
 			break
-		command = json.loads(message)
-		if command["command"] == "message":
-			yield from messagehandler.send(name, command, clients)
-	
+		cmd = json.loads(cmd)
+		if cmd["command"] == "message":
+			messagehandler.send(uid,cmd,[clients[a]["socket"] for a in channels[cmd["channel"]]]
+
 start_server = websockets.serve(client_handler, *LISTEN_ADDRESS)
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()

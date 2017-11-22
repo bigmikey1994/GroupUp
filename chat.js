@@ -1,11 +1,10 @@
 var myApp = angular.module('myApp',[]);
 myApp.controller("chatCtrl", ChatCtrl);
 var chat;
-var socket = new WebSocket("ws://localhost:8080/")
+var socket = new WebSocket("ws://localhost:8080/");
 function ChatCtrl($scope) {
   chat = this;
-  chat.messages = [{user: "test", message: "did this work"},
-                  {user: "test2", message: "did this work again"}];
+  chat.messages = [];
   chat.user;
   chat.message;
   chat.pass;
@@ -29,20 +28,28 @@ function ChatCtrl($scope) {
     com = {};
     com.command = "message";
     com.message = chat.message;
+    com.channel = 1;
     socket.send(JSON.stringify(com));
   };
-  chat.addMessage = function(user, message) {
-    chat.messages.push({user: user, message: message});
+  chat.addMessage = function(message) {
+    chat.messages.push(message);
   }
   chat.update = function() {
     $scope.$apply();
   }
+  chat.logout = function() {
+    socket.send("");
+    socket.close();
+    socket = new WebSocket("ws://localhost:8080/");
+    socket.onmessage = onmessage;
+    chat.online = false;
+  }
 };
-socket.onmessage = function (event) {
+onmessage = function (event) {
   var com = JSON.parse(event.data);
   switch(com.command) {
     case "message":
-      chat.addMessage(com.user, com.message);
+      chat.addMessage(com.message);
       break;
 
     case "fail":
@@ -50,8 +57,11 @@ socket.onmessage = function (event) {
       break;
 
     case "success":
+      chat.messages = [];
       chat.online = true;
-      break;
+      chat.error = "";
+      break;      
   }	
   chat.update();
 }
+socket.onmessage = onmessage;
