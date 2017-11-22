@@ -38,6 +38,7 @@ CREATE TABLE `Channel_users` (
 
 LOCK TABLES `Channel_users` WRITE;
 /*!40000 ALTER TABLE `Channel_users` DISABLE KEYS */;
+INSERT INTO `Channel_users` VALUES (1,4),(1,5),(1,6),(1,9),(1,16),(1,17),(1,18),(1,19),(1,20),(2,20),(1,24),(1,25);
 /*!40000 ALTER TABLE `Channel_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -52,7 +53,7 @@ CREATE TABLE `Groupchannel` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -61,6 +62,7 @@ CREATE TABLE `Groupchannel` (
 
 LOCK TABLES `Groupchannel` WRITE;
 /*!40000 ALTER TABLE `Groupchannel` DISABLE KEYS */;
+INSERT INTO `Groupchannel` VALUES (1,'default'),(2,'test');
 /*!40000 ALTER TABLE `Groupchannel` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -80,7 +82,7 @@ CREATE TABLE `MsgLog` (
   PRIMARY KEY (`id`),
   KEY `channel_id` (`channel_id`,`user_id`),
   CONSTRAINT `MsgLog_ibfk_1` FOREIGN KEY (`channel_id`, `user_id`) REFERENCES `Channel_users` (`channel_id`, `user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -89,6 +91,7 @@ CREATE TABLE `MsgLog` (
 
 LOCK TABLES `MsgLog` WRITE;
 /*!40000 ALTER TABLE `MsgLog` DISABLE KEYS */;
+INSERT INTO `MsgLog` VALUES (1,1,4,'test','2017-11-01 19:53:43'),(2,1,4,'test','2017-11-01 19:55:48'),(3,1,4,'this was a triumph','2017-11-01 19:56:01'),(4,1,24,'test','2017-11-22 01:14:35'),(5,1,24,'test','2017-11-22 01:25:37');
 /*!40000 ALTER TABLE `MsgLog` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -103,9 +106,10 @@ CREATE TABLE `User` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   `password` varchar(256) NOT NULL,
+  `dispname` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -114,7 +118,7 @@ CREATE TABLE `User` (
 
 LOCK TABLES `User` WRITE;
 /*!40000 ALTER TABLE `User` DISABLE KEYS */;
-INSERT INTO `User` VALUES (4,'name','€ê–&M\Zí‘sy]ç½?_G'),(5,'test','€£uÌ›ÔN|'),(6,'test2','€£uÌ›ÔN|'),(9,'test4','€£uÌ›ÔN|'),(16,'awkward','€ê–&M\Zí‘sy]ç½?_G');
+INSERT INTO `User` VALUES (4,'name','€1þÛ†_@Þ÷	Ø8*³žV9:3!jØ’|›žõ\\','name'),(5,'test','€*aJ¸›tÂ‘¨O;g¦sæ_áæ“','test'),(6,'test2','€*aJ¸›tÂ‘¨O;g¦sæ_áæ“','test2'),(9,'test4','€*aJ¸›tÂ‘¨O;g¦sæ_áæ“','test4'),(16,'awkward','€1þÛ†_@Þ÷	Ø8*³žV9:3!jØ’|›žõ\\','awkward'),(17,'yolo','€ê6è‚¬\n%ób¿´<I°É¤ÊSœðe ›Õ’­]^','yolo'),(18,'username','€1þÛ†_@Þ÷	Ø8*³žV9:3!jØ’|›žõ\\','username'),(19,'SERVER','€pÅáÜòeê‰‚\'§ÒYA64b\'`+˜):º@«¸b=N˜›{ì','SERVER'),(20,'NotAFox','€ £A€Í´çÁËI_õŒ[','NotAFox'),(21,'NotAFox2','€ £A€Í´çÁËI_õŒ[',NULL),(22,'NotAFox3','€ £A€Í´çÁËI_õŒ[',NULL),(23,'NotAFox4','€ £A€Í´çÁËI_õŒ[','NotAFox4'),(24,'testtest','€E#V†ï‘\n_›ØÂä','testtest'),(25,'testtesttest','€£uÌ›ÔN|','testtesttest');
 /*!40000 ALTER TABLE `User` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -147,50 +151,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
---
--- Dumping routines for database 'Group_Up'
---
-/*!50003 DROP PROCEDURE IF EXISTS `login` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `login`(IN username varchar(30), in pass varchar(30))
-BEGIN
-SELECT id FROM User
-WHERE name = username AND password = DES_ENCRYPT(pass);
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `register` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8 */ ;
-/*!50003 SET character_set_results = utf8 */ ;
-/*!50003 SET collation_connection  = utf8_general_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `register`(in username varchar(30), in pass varchar(30))
-begin
-if not exists (select * from User where name = username) then insert into User (name, password) values (username, pass);
-end if;
-end ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -201,4 +161,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-10-29 12:21:09
+-- Dump completed on 2017-11-22 11:54:21
