@@ -11,7 +11,7 @@ def login(com):
 	cursor.execute("CALL login(%s,%s)", (com['user'], com['password']))
 	success = cursor.fetchone()
 	if success:
-		return success[0]
+		return success
 	return 'Invalid username or password'
 
 def register(com):
@@ -19,7 +19,7 @@ def register(com):
 	success = cursor.execute("CALL register(%s, %s)", (com['user'], com['password']))
 	success = cursor.fetchone()
 	if success:
-		return success[0]
+		return success
 	return 'An account with that name already exists'
 
 def getchannels(uid):

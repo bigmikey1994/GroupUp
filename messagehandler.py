@@ -9,8 +9,9 @@ db = pymysql.connect(host='localhost',
 
 def send(user, com, clients):
 	cursor = db.cursor()
-	cursor.execute("CALL addmessage(%s,%s,%s)", (user,com["channel"],com["message"])
+	cursor.execute("CALL addmessage(%s,%s,%s)", (user,com["channel"],com["message"]))
 	tmp = cursor.fetchone()
-	message = {"id": tmp[0], "channel": tmp[1], "user": tmp[3], "timestamp": tmp[4]}
+	print(tmp)
+	message = {"id": tmp[0], "channel": tmp[1], "message": tmp[2], "user": tmp[3], "timestamp": str(tmp[4])}
 	for client in clients:
 		yield from client.send(json.dumps({"command": "message", "message": message}))

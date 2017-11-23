@@ -15,7 +15,7 @@ def client_handler(websocket,path):
 	if cmd["command"] == "login":
 		success = accounthandler.login(cmd)
 		if not type(success) is str:
-			if clients[success[0]]:
+			if success[0] in clients.keys():
 				success = "That account is already logged in"
 	if cmd["command"] == "register":
 		success = accounthandler.register(cmd)
@@ -27,15 +27,15 @@ def client_handler(websocket,path):
 		if cmd["command"] == "login":
 			success = accounthandler.login(cmd)
 			if not type(success) is str:
-				if clients[success[0]]:
+				if success[0] in clients.keys():
 					success = "That account is already logged in"
 		if cmd["command"] == "register":
 			success = accounthandler.register(cmd)
 	uid = success[0]
-	channels = accounthandler.getchannels(uid)
-	clients[uid] = {"socket": websocket, "channels": channels}
-	for c in channels:
-		if channels[c[0]]:
+	chan = accounthandler.getchannels(uid)
+	clients[uid] = {"socket": websocket, "channels": chan}
+	for c in chan:
+		if c[0] in channels.keys():
 			channels[c[0]].append(uid)
 		else:
 			channels[c[0]] = [uid]
@@ -47,9 +47,10 @@ def client_handler(websocket,path):
 				channels[c[0]].remove(uid)
 			del clients[uid]
 			break
+		print(cmd)
 		cmd = json.loads(cmd)
 		if cmd["command"] == "message":
-			messagehandler.send(uid,cmd,[clients[a]["socket"] for a in channels[cmd["channel"]]]
+			yield from messagehandler.send(uid,cmd,[clients[a]["socket"] for a in channels[cmd["channel"]]])
 
 start_server = websockets.serve(client_handler, *LISTEN_ADDRESS)
 asyncio.get_event_loop().run_until_complete(start_server)

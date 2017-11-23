@@ -1,7 +1,7 @@
 var myApp = angular.module('myApp',[]);
 myApp.controller("chatCtrl", ChatCtrl);
 var chat;
-var socket = new WebSocket("ws://localhost:8080/");
+var socket = new WebSocket("ws://74.130.40.194:8080/");
 function ChatCtrl($scope) {
   chat = this;
   chat.messages = [];

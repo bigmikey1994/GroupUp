@@ -38,7 +38,7 @@ CREATE TABLE `Channel_users` (
 
 LOCK TABLES `Channel_users` WRITE;
 /*!40000 ALTER TABLE `Channel_users` DISABLE KEYS */;
-INSERT INTO `Channel_users` VALUES (1,4),(1,5),(1,6),(1,9),(1,16),(1,17),(1,18),(1,19),(1,20),(2,20),(1,24),(1,25);
+INSERT INTO `Channel_users` VALUES (1,4),(1,5),(1,6),(1,9),(1,16),(1,17),(1,18),(1,19),(1,20),(2,20),(1,24),(1,25),(1,26),(1,27),(1,28),(1,29),(1,30);
 /*!40000 ALTER TABLE `Channel_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -82,7 +82,7 @@ CREATE TABLE `MsgLog` (
   PRIMARY KEY (`id`),
   KEY `channel_id` (`channel_id`,`user_id`),
   CONSTRAINT `MsgLog_ibfk_1` FOREIGN KEY (`channel_id`, `user_id`) REFERENCES `Channel_users` (`channel_id`, `user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,7 +91,7 @@ CREATE TABLE `MsgLog` (
 
 LOCK TABLES `MsgLog` WRITE;
 /*!40000 ALTER TABLE `MsgLog` DISABLE KEYS */;
-INSERT INTO `MsgLog` VALUES (1,1,4,'test','2017-11-01 19:53:43'),(2,1,4,'test','2017-11-01 19:55:48'),(3,1,4,'this was a triumph','2017-11-01 19:56:01'),(4,1,24,'test','2017-11-22 01:14:35'),(5,1,24,'test','2017-11-22 01:25:37');
+INSERT INTO `MsgLog` VALUES (1,1,4,'test','2017-11-01 19:53:43'),(2,1,4,'test','2017-11-01 19:55:48'),(3,1,4,'this was a triumph','2017-11-01 19:56:01'),(4,1,24,'test','2017-11-22 01:14:35'),(5,1,24,'test','2017-11-22 01:25:37'),(6,1,26,'test','2017-11-22 17:08:33'),(7,1,26,'test','2017-11-22 17:10:26'),(8,1,26,'test','2017-11-22 17:14:20'),(9,1,26,'test','2017-11-22 17:18:43'),(10,1,26,'test2','2017-11-22 17:27:02'),(11,1,26,'test','2017-11-22 18:04:51'),(12,1,27,'test','2017-11-22 18:05:17'),(13,1,28,'test','2017-11-22 18:16:21'),(14,1,26,'test','2017-11-22 18:27:03'),(15,1,26,'test','2017-11-22 18:27:06'),(16,1,26,'test','2017-11-22 18:27:11'),(17,1,29,'taur test','2017-11-23 01:03:04'),(18,1,20,'rawr','2017-11-23 01:03:07'),(19,1,20,'kk','2017-11-23 01:03:10'),(20,1,20,'I need to fix the chat box clearing itself again','2017-11-23 01:03:21'),(21,1,20,'test','2017-11-23 02:14:40');
 /*!40000 ALTER TABLE `MsgLog` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -109,7 +109,7 @@ CREATE TABLE `User` (
   `dispname` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,7 +118,7 @@ CREATE TABLE `User` (
 
 LOCK TABLES `User` WRITE;
 /*!40000 ALTER TABLE `User` DISABLE KEYS */;
-INSERT INTO `User` VALUES (4,'name','€1þÛ†_@Þ÷	Ø8*³žV9:3!jØ’|›žõ\\','name'),(5,'test','€*aJ¸›tÂ‘¨O;g¦sæ_áæ“','test'),(6,'test2','€*aJ¸›tÂ‘¨O;g¦sæ_áæ“','test2'),(9,'test4','€*aJ¸›tÂ‘¨O;g¦sæ_áæ“','test4'),(16,'awkward','€1þÛ†_@Þ÷	Ø8*³žV9:3!jØ’|›žõ\\','awkward'),(17,'yolo','€ê6è‚¬\n%ób¿´<I°É¤ÊSœðe ›Õ’­]^','yolo'),(18,'username','€1þÛ†_@Þ÷	Ø8*³žV9:3!jØ’|›žõ\\','username'),(19,'SERVER','€pÅáÜòeê‰‚\'§ÒYA64b\'`+˜):º@«¸b=N˜›{ì','SERVER'),(20,'NotAFox','€ £A€Í´çÁËI_õŒ[','NotAFox'),(21,'NotAFox2','€ £A€Í´çÁËI_õŒ[',NULL),(22,'NotAFox3','€ £A€Í´çÁËI_õŒ[',NULL),(23,'NotAFox4','€ £A€Í´çÁËI_õŒ[','NotAFox4'),(24,'testtest','€E#V†ï‘\n_›ØÂä','testtest'),(25,'testtesttest','€£uÌ›ÔN|','testtesttest');
+INSERT INTO `User` VALUES (4,'name','€1þÛ†_@Þ÷	Ø8*³žV9:3!jØ’|›žõ\\','name'),(5,'test','€*aJ¸›tÂ‘¨O;g¦sæ_áæ“','test'),(6,'test2','€*aJ¸›tÂ‘¨O;g¦sæ_áæ“','test2'),(9,'test4','€*aJ¸›tÂ‘¨O;g¦sæ_áæ“','test4'),(16,'awkward','€1þÛ†_@Þ÷	Ø8*³žV9:3!jØ’|›žõ\\','awkward'),(17,'yolo','€ê6è‚¬\n%ób¿´<I°É¤ÊSœðe ›Õ’­]^','yolo'),(18,'username','€1þÛ†_@Þ÷	Ø8*³žV9:3!jØ’|›žõ\\','username'),(19,'SERVER','€pÅáÜòeê‰‚\'§ÒYA64b\'`+˜):º@«¸b=N˜›{ì','SERVER'),(20,'NotAFox','€ £A€Í´çÁËI_õŒ[','NotAFox'),(21,'NotAFox2','€ £A€Í´çÁËI_õŒ[',NULL),(22,'NotAFox3','€ £A€Í´çÁËI_õŒ[',NULL),(23,'NotAFox4','€ £A€Í´çÁËI_õŒ[','NotAFox4'),(24,'testtest','€E#V†ï‘\n_›ØÂä','testtest'),(25,'testtesttest','€£uÌ›ÔN|','testtesttest'),(26,'sexy','€âÒº!»ˆnG','sexy'),(27,'lolwat','€œæº“–Î\Zk','lolwat'),(28,'rawr','€iÞ¨ljòšˆ','rawr'),(29,'doubletrouble','€LGbaãzåÅ0®\nÊÊ','doubletrouble'),(30,'testestestest','€£uÌ›ÔN|','testestestest');
 /*!40000 ALTER TABLE `User` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -167,10 +167,13 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addmessage`(uid int(11), cid int(11), message text)
 begin
-  insert into MsgLog (channel_id, user_id, msg)
-  values (cid, uid, message);
-  select * from MsgLog
-  where id = last_insert_id();
+insert into MsgLog(channel_id, user_id, msg)
+values (cid, uid, message);
+select MsgLog.id, MsgLog.channel_id, MsgLog.msg, User.dispname, MsgLog.time_stamp
+from MsgLog
+inner join User
+on User.id = MsgLog.user_id
+where MsgLog.id = last_insert_id();
 end ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -256,4 +259,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-22 11:59:56
+-- Dump completed on 2017-11-22 22:27:42
