@@ -34,12 +34,13 @@ def client_handler(websocket,path):
 	uid = success[0]
 	chan = accounthandler.getchannels(uid)
 	clients[uid] = {"socket": websocket, "channels": chan}
+	yield from websocket.send(json.dumps({"command":"success", "channels": chan}))
 	for c in chan:
 		if c[0] in channels.keys():
 			channels[c[0]].append(uid)
 		else:
 			channels[c[0]] = [uid]
-	yield from websocket.send(json.dumps({"command":"success", "channels": channels}))
+		yield from websocket.send(json.dumps(messagehandler.initchannel(c[0])))
 	while True:
 		cmd = yield from websocket.recv()
 		if cmd == "":

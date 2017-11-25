@@ -15,3 +15,9 @@ def send(user, com, clients):
 	message = {"id": tmp[0], "channel": tmp[1], "message": tmp[2], "user": tmp[3], "timestamp": str(tmp[4])}
 	for client in clients:
 		yield from client.send(json.dumps({"command": "message", "message": message}))
+
+def initchannel(channel):
+	cursor = db.cursor()
+	cursor.execute("CALL getmessage(%s)", (channel))
+	tmp = cursor.fetchall()
+	return {"command": "channel", "channel": channel, "messages": [{"id": a[0], "channel": a[1], "message": a[2], "user": a[3], "timestamp": str(a[4])} for a in tmp]}

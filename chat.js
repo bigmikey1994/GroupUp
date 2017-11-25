@@ -5,6 +5,8 @@ var socket = new WebSocket("ws://74.130.40.194:8080/");
 function ChatCtrl($scope) {
   chat = this;
   chat.messages = [];
+  chat.channels = [];
+  chat.activechannel = 1;
   chat.user;
   chat.message;
   chat.pass;
@@ -28,11 +30,11 @@ function ChatCtrl($scope) {
     com = {};
     com.command = "message";
     com.message = chat.message;
-    com.channel = 1;
+    com.channel = chat.activechannel;
     socket.send(JSON.stringify(com));
   };
   chat.addMessage = function(message) {
-    chat.messages.push(message);
+    chat.messages[message.channel].push(message);
   }
   chat.update = function() {
     $scope.$apply();
@@ -58,9 +60,14 @@ onmessage = function (event) {
 
     case "success":
       chat.messages = [];
+      chat.channels = com.channels;
       chat.online = true;
       chat.error = "";
-      break;      
+      break;
+
+    case "channel":
+      chat.messages[com.channel] = com.messages;
+      break;
   }	
   chat.update();
 }

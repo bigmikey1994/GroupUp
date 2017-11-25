@@ -1,4 +1,5 @@
 <html>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
   <script src="chat.js"></script>
   <body ng-app="myApp">
@@ -11,13 +12,22 @@
         <button ng-click="chat.register()">Register</button>
         {{chat.error}}
       </div>
-      <div ng-show="chat.online">
-        <div ng-repeat="message in chat.messages">
-          {{"[" + message.timestamp + "] " + message.user + ": " + message.message}}
+      <div ng-show="chat.online" class="container-fluid">
+        <div class="row">
+	  <div class="col-1">
+            <div ng-repeat="channel in chat.channels" ng-class="chat.activechannel != channel[0] ? 'btn btn-outline-primary' : 'btn btn-primary'" ng-click="chat.activechannel = channel[0]" class="container-fluid">
+              {{channel[1]}}
+            </div>
+          </div>
+          <div class="col-11">
+            <div ng-repeat="message in chat.messages[chat.activechannel]">
+              {{"[" + message.timestamp + "] " + message.user + ": " + message.message}}
+            </div>
+            <input ng-model="chat.message" />
+            <button ng-click="chat.sendMessage()">Send Message</button>
+	    <button ng-click="chat.logout()">Log Out</button>
+          </div>
         </div>
-        <input ng-model="chat.message" />
-        <button ng-click="chat.sendMessage()">Send Message</button>
-	<button ng-click="chat.logout()">Log Out</button>
       </div>
     </div>
   </body>
