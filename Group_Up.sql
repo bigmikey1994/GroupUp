@@ -39,7 +39,7 @@ CREATE TABLE `Channel_users` (
 
 LOCK TABLES `Channel_users` WRITE;
 /*!40000 ALTER TABLE `Channel_users` DISABLE KEYS */;
-INSERT INTO `Channel_users` VALUES (1,4,2),(1,5,2),(1,6,2),(1,9,2),(1,16,2),(1,17,2),(1,18,2),(1,19,2),(1,20,2),(1,24,2),(1,25,2),(1,26,2),(1,27,2),(1,28,2),(1,29,2),(1,30,2),(1,31,2),(1,32,2),(1,33,2),(1,34,2),(1,35,2),(2,20,2);
+INSERT INTO `Channel_users` VALUES (1,4,2),(1,5,2),(1,6,2),(1,9,2),(1,16,2),(1,17,2),(1,18,2),(1,19,2),(1,20,2),(1,24,2),(1,25,2),(1,26,2),(1,27,2),(1,28,2),(1,29,2),(1,30,2),(1,31,2),(1,32,2),(1,33,2),(1,34,2),(1,35,2),(2,20,2),(3,20,3);
 /*!40000 ALTER TABLE `Channel_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -55,7 +55,7 @@ CREATE TABLE `Groupchannel` (
   `name` varchar(30) NOT NULL,
   `private` int(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,7 +64,7 @@ CREATE TABLE `Groupchannel` (
 
 LOCK TABLES `Groupchannel` WRITE;
 /*!40000 ALTER TABLE `Groupchannel` DISABLE KEYS */;
-INSERT INTO `Groupchannel` VALUES (1,'default',0),(2,'test',0);
+INSERT INTO `Groupchannel` VALUES (1,'default',0),(2,'test',0),(3,'testingitout',0);
 /*!40000 ALTER TABLE `Groupchannel` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -182,6 +182,23 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `createchannel` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createchannel`(uid int(11), cname varchar(30), isprivate int(1))
+begin insert into Groupchannel(name, private) values (cname, isprivate); insert into Channel_users (channel_id, user_id, role) values ((select max(id) from Groupchannel), uid, 3); select max(id) from Groupchannel; end ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `getchannels` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -285,4 +302,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-24 20:20:41
+-- Dump completed on 2017-11-26 19:43:25
