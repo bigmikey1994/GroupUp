@@ -32,6 +32,7 @@ function ChatCtrl($scope) {
     com.message = chat.message;
     com.channel = chat.activechannel;
     socket.send(JSON.stringify(com));
+    chat.message = "";
   };
   chat.addMessage = function(message) {
     chat.messages[message.channel].push(message);
@@ -42,8 +43,10 @@ function ChatCtrl($scope) {
   chat.logout = function() {
     socket.send("");
     socket.close();
-    socket = new WebSocket("ws://localhost:8080/");
+    socket = new WebSocket("ws://74.130.40.194:8080/");
     socket.onmessage = onmessage;
+    chat.user = "";
+    chat.pass = "";
     chat.online = false;
   }
 };
